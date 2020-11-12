@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import QuestionCard from './components/QuestionCard';
 import { QuestionState, fetchQuizQuestions, Difficulty, Question } from './API';
 
-type AnswerObject = {
+export type AnswerObject = {
   question: string;
   answer: string;
   correct: boolean;
@@ -61,7 +61,13 @@ const App = () => {
   }
 
   const nextQuestion = () => {
-    
+    // Move on the next question ifg not the last question
+    const nextQuestion = number + 1;
+    if(nextQuestion === TOTAL_QUESTIONS) {
+      setGameOver(true);
+    } else {
+      setNumber(nextQuestion);
+    }
   }
 
   return (
@@ -73,7 +79,7 @@ const App = () => {
           <button
             className="start"
             onClick={startTrivia}>
-            Start
+            {gameOver ? "Start" : "ReStart"}
           </button>
         ) : null
       }
@@ -89,7 +95,7 @@ const App = () => {
           totalQuestions={TOTAL_QUESTIONS}
           question={questions[number].question}
           answers={questions[number].answers}
-          userAnswer={userAnswers ? userAnswers[number] : undefined}
+          userAnswer={userAnswers && userAnswers[number]}
           callback={checkAnswer}
         />
       )}
